@@ -17,5 +17,14 @@ model Url {
   createdAt DateTime
   updatedAt DateTime?
   deletedAt DateTime?
+  creator   User      @relation(fields: [createdBy], references: [id])
   createdBy String
+}
+
+model User {
+  id        String   @id
+  email     String   @unique
+  password  String
+  createdAt DateTime
+  Url       Url[]
 }
