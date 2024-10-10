@@ -17,7 +17,7 @@ export class CreateUserUseCase {
         
         const user = new User({
             email,
-            password: await hash(password, 10),
+            password: await hash(password, 10)
         })
         
         await this.userRepository.create(user)
