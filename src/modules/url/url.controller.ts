@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Headers } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { UrlViewModel } from './viewModel/urlViewModel';
+import { Public } from '../auth/decorators/isPublic';
 
 @Controller('url')
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}
 
   @Post('short')
+  @Public()
   create(@Body() createUrlDto: CreateUrlDto) {
     const shortenedUrl = this.urlService.create(createUrlDto);
     return UrlViewModel.toHttp(shortenedUrl)

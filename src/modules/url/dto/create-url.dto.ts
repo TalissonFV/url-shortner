@@ -12,4 +12,6 @@ export class CreateUrlDto {
     @IsString()
     @IsUrl()
     originUrl: string;
+
+    createdBy?: string;
 }
