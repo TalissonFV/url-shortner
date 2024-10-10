@@ -11,7 +11,7 @@ export class UrlService {
 
   create(createUrlDto: CreateUrlDto) {
     const url = new Url({
-      originUrl: createUrlDto.originUrl
+      ...createUrlDto
     });
     this.urlRepository.save(url)
     return url

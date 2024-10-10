@@ -3,7 +3,7 @@ Encurtador de URL com e sem autenticação para teste tecnico
 ## Descrição
 Encurtador de URL utilizando Nest e Prisma (SQLite)
 
-## Instalação nest e pnmp
+## Instalação pnpm
 
 ```bash
 $ npm install -g pnpm
