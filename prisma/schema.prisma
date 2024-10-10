@@ -11,13 +11,14 @@ datasource db {
 }
 
 model Url {
-  id        String    @id
-  originUrl String
-  short_id  String
-  createdAt DateTime
-  updatedAt DateTime?
-  deletedAt DateTime?
-  createdBy String
+  id            String    @id
+  originUrl     String
+  short_id      String    @unique
+  createdAt     DateTime
+  updatedAt     DateTime?
+  deletedAt     DateTime?
+  createdBy     String
+  clickedAmount Int
 }
 
 model User {

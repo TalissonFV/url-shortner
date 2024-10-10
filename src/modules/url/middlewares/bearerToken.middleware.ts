@@ -7,7 +7,6 @@ import { Request, Response, NextFunction } from 'express';
 export class BearerTokenMiddleware implements NestMiddleware {
     constructor(private readonly jwtService: JwtService) {}
     use(req: Request, res: Response, next: NextFunction) {
-        console.log(req.headers['authorization'])
         if (req.headers['authorization']) {
             const token = req.headers['authorization'].replace("Bearer ", "")
             const { sub } = this.jwtService.decode(token)
