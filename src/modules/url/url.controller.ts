@@ -1,39 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Headers, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Request, Res, Delete } from '@nestjs/common';
 import { UrlService } from './url.service';
-import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { UrlViewModel } from './viewModel/urlViewModel';
-import { Public } from '../auth/decorators/isPublic';
 import { Response } from 'express';
-import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
+import { AuthenticatedRequestModel } from '../auth/models/authenticatedRequestModel';
+import { UrlListViewModel } from './viewModel/urlListViewModel';
+import { DeleteUrlDto } from './dto/delete-url.dto';
+import { ListAllUrlDto } from './dto/list-all-url.dto';
 
-@Controller()
+@Controller('url')
 export class UrlController {
   constructor(private readonly urlService: UrlService) { }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('short')
-  @Public()
-  create(@Body() createUrlDto: CreateUrlDto) {
-    const shortenedUrl = this.urlService.create(createUrlDto);
-    return UrlViewModel.toHttp(shortenedUrl)
+  @Get('list')
+  async findAll(@Body() listAllUrlDto: ListAllUrlDto, @Res() res: Response, @Request() request: AuthenticatedRequestModel) {
+    const user = request.user
+    const url = await this.urlService.findAll(user.id, listAllUrlDto);
+
+    return res.send(UrlListViewModel.toHttp(url))
   }
 
-  @Public()
-  @Get(':short_id')
-  async findShortUrl(@Param('short_id') shortId: string, @Res() res: Response) {
-    const url = await this.urlService.findShortUrl(shortId);
+  @Patch('update-destiny')
+  async update(@Body() updateUrlDto: UpdateUrlDto, @Request() request: AuthenticatedRequestModel) {
+    const { id: userId } = request.user
+    const url = await this.urlService.update(updateUrlDto, userId);
 
-    return url ? res.redirect(301, url.originUrl) : res.sendStatus(404)
+    return UrlViewModel.toUrlObejct(url)
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto) {
-  //   return this.urlService.update(+id, updateUrlDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.urlService.remove(+id);
-  // }
+  @Delete('delete')
+  async remove(@Body() body: DeleteUrlDto, @Request() request: AuthenticatedRequestModel) {
+    const { id: userId } = request.user
+    const urlId = body.urlId
+    await this.urlService.remove(urlId, userId);
+    
+  }
 }

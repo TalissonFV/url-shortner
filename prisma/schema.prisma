@@ -17,7 +17,8 @@ model Url {
   createdAt     DateTime
   updatedAt     DateTime?
   deletedAt     DateTime?
-  createdBy     String
+  creator       User?      @relation(fields: [createdBy], references: [id])
+  createdBy     String?
   clickedAmount Int
 }
 
@@ -26,4 +27,5 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime
+  Url       Url[]
 }

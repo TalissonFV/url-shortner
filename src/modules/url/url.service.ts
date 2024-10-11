@@ -1,40 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
 import { UrlRepository } from './repositories/UrlRepository';
+import { ListAllUrlDto } from './dto/list-all-url.dto';
 
 @Injectable()
 export class UrlService {
   constructor(private readonly urlRepository: UrlRepository) {}
 
+  async findAll(userId: string, listAllUrlDto: ListAllUrlDto): Promise<Url[] | null> {
+    const page = listAllUrlDto.page || 1
+    const perPage = listAllUrlDto.perPage || 20
 
-  create(createUrlDto: CreateUrlDto) {
-    const url = new Url({
-      ...createUrlDto
-    });
-    this.urlRepository.save(url)
-    return url
+    const urls = await this.urlRepository.findAllUrlByUser(userId, page, perPage)
+
+    return urls
   }
 
-  findAll() {
-    return `This action returns all url`;
-  }
+  async update(updateUrlDto: UpdateUrlDto, userId: string): Promise<Url | null> {
+    const { urlId, newUrlDestiny } = updateUrlDto
+    const url = await this.urlRepository.findById(urlId, userId)
 
-  async findShortUrl(shortId: string): Promise<Url | null> {
 
-    const url = await this.urlRepository.findByShortId(shortId)
-    if (url) {
-      await this.urlRepository.updateClick(shortId)
+    if(url && (url.originUrl !== newUrlDestiny)) {
+      url.originUrl = newUrlDestiny
+      await this.urlRepository.updateUrlDestiny(urlId, newUrlDestiny)
     }
+
     return url
   }
 
-  update(id: number, updateUrlDto: UpdateUrlDto) {
-    return `This action updates a #${id} url`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} url`;
+  async remove(urlId: string, userId: string) {
+    const url = await this.urlRepository.deleteUrl(urlId, userId)
   }
 }

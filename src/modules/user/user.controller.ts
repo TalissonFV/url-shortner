@@ -4,7 +4,7 @@ import { CreateUserBody } from "./dtos/createUserBody";
 import { UserViewModel } from "./viewModel/userViewModel";
 import { Public } from "../auth/decorators/isPublic";
 
-@Controller('users')
+@Controller('user')
 export class UserController{
     
     constructor(private createUserUseCase: CreateUserUseCase){}
