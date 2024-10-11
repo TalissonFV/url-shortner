@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -17,7 +18,7 @@ model Url {
   createdAt     DateTime
   updatedAt     DateTime?
   deletedAt     DateTime?
-  creator       User?      @relation(fields: [createdBy], references: [id])
+  creator       User?     @relation(fields: [createdBy], references: [id])
   createdBy     String?
   clickedAmount Int
 }
@@ -29,3 +30,4 @@ model User {
   createdAt DateTime
   Url       Url[]
 }
+
