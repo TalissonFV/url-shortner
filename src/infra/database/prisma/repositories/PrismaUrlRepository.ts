@@ -61,15 +61,30 @@ export class PrismaUrlRepository implements UrlRepository {
         return PrismaUrlMapper.toArrayDomain(url);
     }
 
-    async findById(id: string): Promise<Url | null> {
+    async findById(id: string, userId: string): Promise<Url | null> {
         const url = await this.prisma.url.findUnique({
             where: {
-                id: id
+                id: id,
+                AND: {
+                    createdBy: userId
+                }
             }
         })
         if (!url) return null;
 
         return PrismaUrlMapper.toDomain(url);
+    }
+
+    async updateUrlDestiny(urlId: string, newOriginUrl: string): Promise<void> {
+        await this.prisma.url.update({
+            where: {
+                id: urlId
+            },
+            data: {
+                originUrl: newOriginUrl,
+                updatedAt: new Date()
+            }
+        })
     }
 
 }

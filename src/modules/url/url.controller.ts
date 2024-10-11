@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Request, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Request, Res, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -38,10 +38,13 @@ export class UrlController {
     return res.send(UrlListViewModel.toHttp(url))
   }
 
-  @Patch(':id')
+  @Patch('url/update_destiny')
   @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto, @Request() request: AuthenticatedRequestModel) {
-    return this.urlService.update(id, updateUrlDto);
+  async update(@Body() updateUrlDto: UpdateUrlDto, @Request() request: AuthenticatedRequestModel) {
+    const user = request.user
+    const url = await this.urlService.update(updateUrlDto, user.id);
+
+    return UrlViewModel.toUrlObejct(url)
   }
 
   // @Delete(':id')

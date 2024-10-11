@@ -3,6 +3,7 @@ import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
 import { UrlRepository } from './repositories/UrlRepository';
+import { User } from '../user/entities/User';
 
 @Injectable()
 export class UrlService {
@@ -19,7 +20,7 @@ export class UrlService {
 
   async findAll(userId: string): Promise<Url[] | null> {
     const urls = await this.urlRepository.findAllUrlByUser(userId)
-    
+
     return urls
   }
 
@@ -32,8 +33,17 @@ export class UrlService {
     return url
   }
 
-  async update(id: string, updateUrlDto: UpdateUrlDto) {
-    // const url = await this.urlRepository.findById() 
+  async update(updateUrlDto: UpdateUrlDto, userId: string): Promise<Url | null> {
+    const { urlId, newUrlDestiny } = updateUrlDto
+    const url = await this.urlRepository.findById(urlId, userId)
+
+
+    if(url && (url.originUrl !== newUrlDestiny)) {
+      url.originUrl = newUrlDestiny
+      await this.urlRepository.updateUrlDestiny(urlId, newUrlDestiny)
+    }
+
+    return url
   }
 
   remove(id: number) {
