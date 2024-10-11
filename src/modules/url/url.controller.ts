@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Request, Res, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Request, Res, UseGuards, HttpCode, HttpStatus, Delete } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -8,6 +8,7 @@ import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { AuthenticatedRequestModel } from '../auth/models/authenticatedRequestModel';
 import { UrlListViewModel } from './viewModel/urlListViewModel';
+import { DeleteUrlDto } from './dto/delete-url.dto';
 
 @Controller()
 export class UrlController {
@@ -30,25 +31,26 @@ export class UrlController {
   }
 
   @Get('url/list')
-  @UseGuards(JwtAuthGuard)
   async findAll(@Res() res: Response, @Request() request: AuthenticatedRequestModel) {
     const user = request.user
     const url = await this.urlService.findAll(user.id);
-
+    
     return res.send(UrlListViewModel.toHttp(url))
   }
 
   @Patch('url/update_destiny')
-  @UseGuards(JwtAuthGuard)
   async update(@Body() updateUrlDto: UpdateUrlDto, @Request() request: AuthenticatedRequestModel) {
-    const user = request.user
-    const url = await this.urlService.update(updateUrlDto, user.id);
+    const { id: userId } = request.user
+    const url = await this.urlService.update(updateUrlDto, userId);
 
     return UrlViewModel.toUrlObejct(url)
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.urlService.remove(+id);
-  // }
+  @Delete('url/delete')
+  async remove(@Body() body: DeleteUrlDto, @Request() request: AuthenticatedRequestModel) {
+    const { id: userId } = request.user
+    const urlId = body.urlId
+    await this.urlService.remove(urlId, userId);
+    
+  }
 }

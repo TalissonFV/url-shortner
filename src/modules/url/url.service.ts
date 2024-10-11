@@ -46,7 +46,7 @@ export class UrlService {
     return url
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} url`;
+  async remove(urlId: string, userId: string) {
+    const url = await this.urlRepository.deleteUrl(urlId, userId)
   }
 }

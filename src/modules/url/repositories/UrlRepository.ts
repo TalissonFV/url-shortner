@@ -5,6 +5,7 @@ export abstract class UrlRepository {
     abstract findByShortId(short_id:string): Promise<Url | null>;
     abstract updateClick(short_id:string): Promise<void>
     abstract findAllUrlByUser(id:string): Promise<Url[] | null>;
-    abstract findById(id:string, userId): Promise<Url | null>;
+    abstract findById(id:string, userId: string): Promise<Url | null>;
     abstract updateUrlDestiny(urlId: string, newOriginUrl: string): Promise<void>
+    abstract deleteUrl(urlId:string, userId: string): Promise<void>
 }

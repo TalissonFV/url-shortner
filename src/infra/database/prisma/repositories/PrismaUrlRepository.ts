@@ -22,7 +22,10 @@ export class PrismaUrlRepository implements UrlRepository {
     async findByShortId(short_id: string): Promise<Url | null> {
         const url = await this.prisma.url.findUnique({
             where: {
-                short_id: short_id
+                short_id: short_id,
+                AND: {
+                    deletedAt: null
+                }
             }
         })
         if (!url) return null;
@@ -46,11 +49,9 @@ export class PrismaUrlRepository implements UrlRepository {
     async findAllUrlByUser(userId: string): Promise<Url[] | null> {
         const url = await this.prisma.url.findMany({
             where: {
-                createdBy: {
-                    equals: userId
-                },
+                createdBy: userId,
                 AND: {
-                    deletedAt: undefined
+                    deletedAt: null
                 }
             },
             
@@ -66,7 +67,8 @@ export class PrismaUrlRepository implements UrlRepository {
             where: {
                 id: id,
                 AND: {
-                    createdBy: userId
+                    createdBy: userId,
+                    deletedAt: null
                 }
             }
         })
@@ -78,11 +80,29 @@ export class PrismaUrlRepository implements UrlRepository {
     async updateUrlDestiny(urlId: string, newOriginUrl: string): Promise<void> {
         await this.prisma.url.update({
             where: {
-                id: urlId
+                id: urlId,
+                AND: {
+                    deletedAt: null
+                }
             },
             data: {
                 originUrl: newOriginUrl,
                 updatedAt: new Date()
+            }
+        })
+    }
+
+    async deleteUrl(urlId: string, userId: string): Promise<void> {
+        await this.prisma.url.update({
+            where: {
+                id: urlId,
+                AND: {
+                    createdBy: userId,
+                    deletedAt: null
+                }
+            },
+            data: {
+                deletedAt: new Date()
             }
         })
     }
