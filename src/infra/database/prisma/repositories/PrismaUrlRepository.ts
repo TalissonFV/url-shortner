@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common";
 import { UrlRepository } from "src/modules/url/repositories/UrlRepository";
 import { Url } from "src/modules/url/entities/url.entity";
 import { PrismaUrlMapper } from "../mappers/PrismaUrlMapper";
-import { equal } from "assert";
 
 @Injectable()
 export class PrismaUrlRepository implements UrlRepository {

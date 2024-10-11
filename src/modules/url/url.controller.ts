@@ -13,7 +13,7 @@ export class UrlController {
   constructor(private readonly urlService: UrlService) { }
 
   @Get('list')
-  async findAll(@Body() listAllUrlDto: ListAllUrlDto, @Res() res: Response, @Request() request: AuthenticatedRequestModel) {
+  async findAll(@Res() res: Response, @Request() request: AuthenticatedRequestModel, @Body() listAllUrlDto?: ListAllUrlDto) {
     const user = request.user
     const url = await this.urlService.findAll(user.id, listAllUrlDto);
 
