@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class ListAllUrlDto{
     @ApiProperty({
@@ -9,6 +9,7 @@ export class ListAllUrlDto{
         description: 'Pagina retornada na paginação'
     })
     @IsNumber()
+    @IsOptional()
     page?: number;
 
     @ApiProperty({
@@ -18,5 +19,6 @@ export class ListAllUrlDto{
         description: 'Quantidade de registros retornados na paginação'
     })
     @IsNumber()
+    @IsOptional()
     perPage?: number;
 }
