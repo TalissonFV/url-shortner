@@ -21,8 +21,13 @@ export class UrlService {
     return `This action returns all url`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} url`;
+  async findShortUrl(shortId: string): Promise<Url | null> {
+
+    const url = await this.urlRepository.findByShortId(shortId)
+    if (url) {
+      await this.urlRepository.updateClick(shortId)
+    }
+    return url
   }
 
   update(id: number, updateUrlDto: UpdateUrlDto) {
