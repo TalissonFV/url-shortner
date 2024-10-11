@@ -7,6 +7,7 @@ interface UrlSchema {
     createdBy: string;
     updatedAt?: Date;
     deletedAt?: Date;
+    clickedAmount?: number;
 }
 
 export class Url {
@@ -14,13 +15,14 @@ export class Url {
     _id: string;
     _short_id: string;
 
-    constructor(props: Replace<UrlSchema, { createdAt?: Date, createdBy?: string, updatedAt?: Date, deletedAt?: Date }>, id?: string, short_id?: string) {
+    constructor(props: Replace<UrlSchema, { createdAt?: Date, createdBy?: string, updatedAt?: Date, deletedAt?: Date, clickedAmount?: number }>, id?: string, short_id?: string) {
         this.props = {
             ...props,
             createdAt: props.createdAt || new Date(),
-            createdBy: props.createdBy || '',
+            createdBy: props.createdBy || undefined,
             updatedAt: props.updatedAt || null,
-            deletedAt: props.deletedAt || null
+            deletedAt: props.deletedAt || null,
+            clickedAmount: props.clickedAmount || 0
         }
         this._id = id || randomUUID();
         this._short_id = short_id || Math.random().toString(36).slice(-6)
@@ -72,6 +74,14 @@ export class Url {
 
     set deletedAt(deletedAt: Date) {
         this.props.deletedAt = deletedAt;
+    }
+
+    get clickedAmount(): number {
+        return this.props.clickedAmount;
+    }
+
+    set clickedAmount(clickedAmount: number) {
+        this.props.clickedAmount = clickedAmount;
     }
 
 }

@@ -10,12 +10,12 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [DatabaseModule, AuthModule, JwtModule.register({
     secret: process.env.JWT_SECRET,
     signOptions: {expiresIn: process.env.JWT_EXPIRES_IN}
-})],
+  })],
   controllers: [UrlController],
   providers: [UrlService],
 })
 export class UrlModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(BearerTokenMiddleware).forRoutes("/url/short");
+    consumer.apply(BearerTokenMiddleware).forRoutes("/short");
   }
 }
