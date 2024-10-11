@@ -1,4 +1,3 @@
-import { User } from "src/modules/user/entities/User"
 import { ValidateUserUseCase } from "./validateUserUseCase"
 import { UserRepositoryInMemory } from "src/modules/user/repositories/UserRepositoryInMemory"
 import { hash } from "bcrypt"
@@ -8,13 +7,13 @@ import { UnauthorizedException } from "@nestjs/common"
 let validateUserUseCase: ValidateUserUseCase
 let userRepositoryInMemory: UserRepositoryInMemory
 
-describe('Validate User', () => {
+describe('Validação de Usuario', () => {
     beforeEach(()=> {
         userRepositoryInMemory = new UserRepositoryInMemory();
         validateUserUseCase = new ValidateUserUseCase(userRepositoryInMemory);
     })
 
-    it("Should be able to return user when credentials are correct", async () => {
+    it("Deve retornar o usuario se email e senha estiver corretos", async () => {
 
         const userPasswordWithoutEncryption = "360"
         const user = makeUser({
@@ -32,7 +31,7 @@ describe('Validate User', () => {
     })
 
 
-    it("Should be able to throw error when credentials incorrect", async () => {
+    it("Deve dar erro se a senha ou email estiverem incorretos", async () => {
         const userPasswordWithoutEncryption = "360"
 
         const user = makeUser({

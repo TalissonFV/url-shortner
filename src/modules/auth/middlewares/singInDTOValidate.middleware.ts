@@ -4,7 +4,7 @@ import { SingInBody } from "../dtos/singInBody";
 import { validate } from "class-validator";
 
 export class SingInDTOValidateMiddleware implements NestMiddleware {
-    async use(req: Request, res: Response, next: NextFunction) {
+    async use(req: Request, next: NextFunction) {
         const {email, password} = req.body
 
         const singInBody = new SingInBody()

@@ -12,7 +12,7 @@ describe('Sing In', () => {
         singInUseCase = new SignInUseCase(jwtService);
     })
 
-    it("Should be able to create a valid access_token", async () => {
+    it("Deve conseguir validar o token de acesso", async () => {
         const user = makeUser({})
 
         const token = await singInUseCase.execute({
