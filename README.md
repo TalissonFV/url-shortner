@@ -17,6 +17,11 @@ $ npm install -g @nestjs/cli
 $ npm install -g pnpm
 ```
 
+## Criando arquivo .env
+
+Alterar o nome do arquivo `.env.example` para `.env` 
+
+
 
 ## Instalação de Dependências
 
