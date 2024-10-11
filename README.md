@@ -4,6 +4,12 @@
 Encurtador de URL utilizando Nest e Prisma (SQLite). Criação e Autenticação de usuario utilizando Passport.js e JWT.
 [Documentação](http://localhost:3000/api) pode ser acessada após rodar o app 
 
+## Utilizando Docker Compose
+```bash
+$ docker compose build
+$ docker compose up
+```
+
 ## Instalação nest e pnpm
 
 ```bash
@@ -143,3 +149,4 @@ O campo `urlId` pode ser obtido após listar todas as URLs criadas pelo usuario.
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
