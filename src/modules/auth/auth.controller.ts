@@ -5,7 +5,7 @@ import { Public } from "./decorators/isPublic";
 import { JwtAuthGuard } from "./guards/jwtAuth.guard";
 import { LocalAuthGuard } from "./guards/localAuth.guard";
 
-@Controller()
+@Controller('auth')
 export class AuthController {
 
     constructor(private singInUseCase: SignInUseCase){}

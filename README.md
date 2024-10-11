@@ -1,11 +1,13 @@
-Encurtador de URL com e sem autenticação para teste tecnico
+# Encurtador de URL com e sem autenticação de usuarios para teste tecnico
 
 ## Descrição
-Encurtador de URL utilizando Nest e Prisma (SQLite)
+Encurtador de URL utilizando Nest e Prisma (SQLite). Criação e Autenticação de usuario utilizando Passport.js e JWT.
+[Documentação](http://localhost:3000/api) pode ser acessada após rodar o app 
 
-## Instalação pnpm
+## Instalação nest e pnpm
 
 ```bash
+$ npm install -g @nestjs/cli
 $ npm install -g pnpm
 ```
 
@@ -14,6 +16,12 @@ $ npm install -g pnpm
 
 ```bash
 $ pnpm install
+```
+
+## Criação do banco SQLite
+```bash
+$ pnpm prisma init --datasource-provider sqlite
+$ pnpm prisma migrate dev
 ```
 
 ## Rodando o app

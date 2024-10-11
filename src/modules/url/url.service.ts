@@ -1,36 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
 import { UrlRepository } from './repositories/UrlRepository';
-import { User } from '../user/entities/User';
+import { ListAllUrlDto } from './dto/list-all-url.dto';
 
 @Injectable()
 export class UrlService {
   constructor(private readonly urlRepository: UrlRepository) {}
 
+  async findAll(userId: string, listAllUrlDto: ListAllUrlDto): Promise<Url[] | null> {
+    const page = listAllUrlDto.page || 1
+    const perPage = listAllUrlDto.perPage || 20
 
-  create(createUrlDto: CreateUrlDto) {
-    const url = new Url({
-      ...createUrlDto
-    });
-    this.urlRepository.save(url)
-    return url
-  }
-
-  async findAll(userId: string): Promise<Url[] | null> {
-    const urls = await this.urlRepository.findAllUrlByUser(userId)
+    const urls = await this.urlRepository.findAllUrlByUser(userId, page, perPage)
 
     return urls
-  }
-
-  async findShortUrl(shortId: string): Promise<Url | null> {
-
-    const url = await this.urlRepository.findByShortId(shortId)
-    if (url) {
-      await this.urlRepository.updateClick(shortId)
-    }
-    return url
   }
 
   async update(updateUrlDto: UpdateUrlDto, userId: string): Promise<Url | null> {

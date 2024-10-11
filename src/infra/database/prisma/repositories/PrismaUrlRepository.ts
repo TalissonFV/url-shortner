@@ -46,16 +46,16 @@ export class PrismaUrlRepository implements UrlRepository {
         })
     }
 
-    async findAllUrlByUser(userId: string): Promise<Url[] | null> {
+    async findAllUrlByUser(userId: string, page: number, perPage: number): Promise<Url[] | null> {
         const url = await this.prisma.url.findMany({
             where: {
                 createdBy: userId,
                 AND: {
                     deletedAt: null
-                }
+                },
             },
-            
-
+            take: perPage,
+            skip: (page - 1) * perPage,
         })
         if (!url) return null;
 
