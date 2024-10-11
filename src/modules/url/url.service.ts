@@ -17,8 +17,10 @@ export class UrlService {
     return url
   }
 
-  findAll() {
-    return `This action returns all url`;
+  async findAll(userId: string): Promise<Url[] | null> {
+    const urls = await this.urlRepository.findAllUrlByUser(userId)
+    
+    return urls
   }
 
   async findShortUrl(shortId: string): Promise<Url | null> {
@@ -30,8 +32,8 @@ export class UrlService {
     return url
   }
 
-  update(id: number, updateUrlDto: UpdateUrlDto) {
-    return `This action updates a #${id} url`;
+  async update(id: string, updateUrlDto: UpdateUrlDto) {
+    // const url = await this.urlRepository.findById() 
   }
 
   remove(id: number) {

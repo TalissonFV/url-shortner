@@ -19,7 +19,7 @@ export class Url {
         this.props = {
             ...props,
             createdAt: props.createdAt || new Date(),
-            createdBy: props.createdBy || '',
+            createdBy: props.createdBy || undefined,
             updatedAt: props.updatedAt || null,
             deletedAt: props.deletedAt || null,
             clickedAmount: props.clickedAmount || 0

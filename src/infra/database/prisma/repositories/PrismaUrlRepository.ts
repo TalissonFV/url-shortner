@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { UrlRepository } from "src/modules/url/repositories/UrlRepository";
 import { Url } from "src/modules/url/entities/url.entity";
 import { PrismaUrlMapper } from "../mappers/PrismaUrlMapper";
+import { equal } from "assert";
 
 @Injectable()
 export class PrismaUrlRepository implements UrlRepository {
@@ -12,7 +13,9 @@ export class PrismaUrlRepository implements UrlRepository {
         const urlRaw = PrismaUrlMapper.toPrisma(url)
 
         await this.prisma.url.create({
-            data: urlRaw
+            data: {
+                ...urlRaw
+            }
         })
     }
 
@@ -38,6 +41,35 @@ export class PrismaUrlRepository implements UrlRepository {
                 }
             }
         })
+    }
+
+    async findAllUrlByUser(userId: string): Promise<Url[] | null> {
+        const url = await this.prisma.url.findMany({
+            where: {
+                createdBy: {
+                    equals: userId
+                },
+                AND: {
+                    deletedAt: undefined
+                }
+            },
+            
+
+        })
+        if (!url) return null;
+
+        return PrismaUrlMapper.toArrayDomain(url);
+    }
+
+    async findById(id: string): Promise<Url | null> {
+        const url = await this.prisma.url.findUnique({
+            where: {
+                id: id
+            }
+        })
+        if (!url) return null;
+
+        return PrismaUrlMapper.toDomain(url);
     }
 
 }

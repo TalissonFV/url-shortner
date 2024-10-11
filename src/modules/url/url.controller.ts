@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Headers, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Request, Res, UseGuards } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -6,6 +6,8 @@ import { UrlViewModel } from './viewModel/urlViewModel';
 import { Public } from '../auth/decorators/isPublic';
 import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
+import { AuthenticatedRequestModel } from '../auth/models/authenticatedRequestModel';
+import { UrlListViewModel } from './viewModel/urlListViewModel';
 
 @Controller()
 export class UrlController {
@@ -27,10 +29,20 @@ export class UrlController {
     return url ? res.redirect(301, url.originUrl) : res.sendStatus(404)
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto) {
-  //   return this.urlService.update(+id, updateUrlDto);
-  // }
+  @Get('url/list')
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Res() res: Response, @Request() request: AuthenticatedRequestModel) {
+    const user = request.user
+    const url = await this.urlService.findAll(user.id);
+
+    return res.send(UrlListViewModel.toHttp(url))
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto, @Request() request: AuthenticatedRequestModel) {
+    return this.urlService.update(id, updateUrlDto);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
